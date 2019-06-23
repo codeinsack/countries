@@ -1,3 +1,3 @@
-import TableHead from "./TableHead"
+import { TableHeadCustom } from "./TableHead"
 
-export default TableHead
+export default TableHeadCustom

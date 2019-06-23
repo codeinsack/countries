@@ -28,7 +28,7 @@ module.exports = {
   resolve: {
     extensions: ["*", ".js", ".jsx"],
     alias: {
-      "@api": path.resolve(appSrc, "api"),
+      "@model": path.resolve(appSrc, "model"),
     },
   },
   output: {

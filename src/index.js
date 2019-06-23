@@ -2,12 +2,13 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { ToastContainer } from "react-toastify"
 
-import Table from "./components/Table"
+import { Table, Filter } from "./components"
 
 import "react-toastify/dist/ReactToastify.css"
 
 const App = () => (
   <>
+    <Filter />
     <Table />
     <ToastContainer position="top-center" />
   </>

@@ -2,9 +2,9 @@ import React from "react"
 
 import { Checkbox, TableCell, TableRow, TableBody } from "@material-ui/core"
 
-import { getSorting, stableSort } from "../TableToolbar/utils"
+import { getSorting, stableSort } from "./utils"
 
-const TableBodyCustom = ({ selected, setSelected, rowsPerPage, page, order, orderBy, countries }) => {
+export const TableBodyCustom = ({ selected, setSelected, rowsPerPage, page, order, orderBy, countries }) => {
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, countries.length - page * rowsPerPage)
   const sortedCountries = stableSort(countries, getSorting(order, orderBy))
 
@@ -70,5 +70,3 @@ const TableBodyCustom = ({ selected, setSelected, rowsPerPage, page, order, orde
     </TableBody>
   )
 }
-
-export default TableBodyCustom

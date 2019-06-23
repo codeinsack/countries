@@ -1,3 +1,3 @@
-import TableBody from './TableBody'
+import { TableBodyCustom } from './TableBody'
 
-export default TableBody
+export default TableBodyCustom

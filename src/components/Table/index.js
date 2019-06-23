@@ -1,3 +1,3 @@
-import Table from "./Table"
+import { TableCustom } from "./Table"
 
-export default Table
+export default TableCustom

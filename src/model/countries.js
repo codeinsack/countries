@@ -1,8 +1,29 @@
-import axios from 'axios'
-import { toast } from 'react-toastify'
-import { createStore, createEvent, createEffect } from 'effector'
+import axios from "axios"
+import { toast } from "react-toastify"
+import { createStore, createEvent, createEffect, combine } from "effector"
 
+import uniq from "lodash/uniq"
+import deburr from "lodash/deburr"
+
+export const $countriesData = createStore([])
 export const $countries = createStore([])
+  .on($countriesData, (state, data) => (
+    data.map(({ name }) => name)
+  ))
+export const $capitals = createStore([])
+  .on($countriesData, (state, data) => (
+    data.map(({ capital }) => capital)
+  ))
+export const $regions = createStore([])
+  .on($countriesData, (state, data) => {
+    const regions = data.map(({ region }) => region)
+    return uniq(regions)
+  })
+export const $countriesFilterData = combine(
+  $countries,
+  $capitals,
+  $regions,
+)
 
 export const fetchAllCountries = createEvent()
 
@@ -12,10 +33,24 @@ fetchAllCountries.watch(() => {
   loadCountries()
 })
 
-loadCountries.use(() => axios.get('https://restcountries.eu/rest/v2/all'))
+loadCountries.use(async () => {
+  const { data } = await axios.get("https://restcountries.eu/rest/v2/all")
+  return data.map(country => {
+    if (country.region === "") {
+      return {
+        ...country,
+        region: "Oceania",
+      }
+    }
+    return country
+  })
+})
 
-$countries.on(loadCountries.done, ((_, response) => response.result.data))
-$countries.on(loadCountries.fail, (() => {
-  toast.error('Error retrieving data')
+$countriesData.on(loadCountries.done, ((_, response) => response.result.map(info => ({
+  ...info,
+  name: deburr(info.name),
+}))))
+$countriesData.on(loadCountries.fail, (() => {
+  toast.error("Error retrieving data")
   return []
 }))

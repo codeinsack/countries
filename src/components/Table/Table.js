@@ -3,14 +3,14 @@ import React, { useEffect, useState, useCallback } from "react"
 
 import { Table, TablePagination, Paper, LinearProgress } from "@material-ui/core"
 
-import { $countries, fetchAllCountries, loadCountries } from "../../model/countries"
+import { $countriesData, fetchAllCountries, loadCountries } from "@model/countries"
 
 import TableHead from "./TableHead"
 import TableBody from "./TableBody"
 import TableToolbar from "./TableToolbar"
 
-const TableCustom = () => {
-  const countries = useStore($countries)
+export const TableCustom = () => {
+  const countriesData = useStore($countriesData)
   const isCountriesLoading = useStore(loadCountries.pending)
   const [order, setOrder] = useState("asc")
   const [orderBy, setOrderBy] = useState("name")
@@ -30,12 +30,12 @@ const TableCustom = () => {
 
   const handleSelectAllClick = useCallback((event) => {
     if (event.target.checked) {
-      const newSelectedRows = countries.map(country => country.name)
+      const newSelectedRows = countriesData.map(country => country.name)
       setSelected(newSelectedRows)
     } else {
       setSelected([])
     }
-  }, [countries, selected])
+  }, [countriesData, selected])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -54,7 +54,7 @@ const TableCustom = () => {
           <TableHead
             order={order}
             orderBy={orderBy}
-            rowCount={countries.length}
+            rowCount={countriesData.length}
             selectedRowsCount={selected.length}
             onSelectAllClick={handleSelectAllClick}
             onRequestSort={handleRequestSort}
@@ -64,7 +64,7 @@ const TableCustom = () => {
             order={order}
             orderBy={orderBy}
             selected={selected}
-            countries={countries}
+            countries={countriesData}
             setSelected={setSelected}
             rowsPerPage={rowsPerPage}
           />
@@ -72,7 +72,7 @@ const TableCustom = () => {
         <TablePagination
           page={page}
           component="div"
-          count={countries.length}
+          count={countriesData.length}
           rowsPerPage={rowsPerPage}
           rowsPerPageOptions={[5, 10, 25]}
           nextIconButtonProps={{ "aria-label": "Next Page" }}
@@ -84,5 +84,3 @@ const TableCustom = () => {
     </>
   )
 }
-
-export default TableCustom

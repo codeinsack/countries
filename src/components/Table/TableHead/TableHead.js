@@ -4,7 +4,7 @@ import { Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from "@mater
 
 import { headColumns } from "./constants"
 
-const TableHeadCustom = ({ order, orderBy, selectedRowsCount, rowCount, onRequestSort, onSelectAllClick }) => (
+export const TableHeadCustom = memo(({ order, orderBy, selectedRowsCount, rowCount, onRequestSort, onSelectAllClick }) => (
   <TableHead>
     <TableRow>
       <TableCell padding="checkbox">
@@ -30,6 +30,4 @@ const TableHeadCustom = ({ order, orderBy, selectedRowsCount, rowCount, onReques
       ))}
     </TableRow>
   </TableHead>
-)
-
-export default memo(TableHeadCustom)
+))
