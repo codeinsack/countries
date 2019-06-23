@@ -1,5 +1,7 @@
 import React from "react"
 
+import numeral from 'numeral'
+
 import { Checkbox, TableCell, TableRow, TableBody } from "@material-ui/core"
 
 import { getSorting, stableSort } from "./utils"
@@ -56,8 +58,8 @@ export const TableBodyCustom = ({ selected, setSelected, rowsPerPage, page, orde
                 {row.name}
               </TableCell>
               <TableCell align="right">{row.region}</TableCell>
-              <TableCell align="right">{row.area}</TableCell>
-              <TableCell align="right">{row.population}</TableCell>
+              <TableCell align="right">{numeral(row.area).format("0,0")}</TableCell>
+              <TableCell align="right">{numeral(row.population).format("0,0")}</TableCell>
               <TableCell align="right">{row.capital}</TableCell>
             </TableRow>
           )

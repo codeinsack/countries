@@ -6,6 +6,8 @@ import uniq from "lodash/uniq"
 import deburr from "lodash/deburr"
 
 export const $countriesData = createStore([])
+export const $countriesFilteredData = createStore([])
+  .on($countriesData, (state, data) => data)
 export const $countries = createStore([])
   .on($countriesData, (state, data) => (
     data.map(({ name }) => name)
@@ -26,6 +28,7 @@ export const $countriesFilterData = combine(
 )
 
 export const fetchAllCountries = createEvent()
+export const filterCountriesData = createEvent()
 
 export const loadCountries = createEffect()
 
@@ -46,11 +49,24 @@ loadCountries.use(async () => {
   })
 })
 
-$countriesData.on(loadCountries.done, ((_, response) => response.result.map(info => ({
-  ...info,
-  name: deburr(info.name),
-}))))
+$countriesData
+  .on(loadCountries.done, ((_, response) => response.result.map(info => ({
+    ...info,
+    name: deburr(info.name),
+  }))))
 $countriesData.on(loadCountries.fail, (() => {
   toast.error("Error retrieving data")
   return []
 }))
+$countriesFilteredData
+  .on(filterCountriesData, (state, data) => (
+    $countriesData.getState()
+      .filter(country => (
+        country.name.toLowerCase()
+          .includes(data.country.toLowerCase())
+        && country.capital.toLowerCase()
+          .includes(data.capital.toLowerCase())
+        && country.region.toLowerCase()
+          .includes(data.region.toLowerCase())
+      ))
+  ))

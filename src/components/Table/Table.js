@@ -3,14 +3,14 @@ import React, { useEffect, useState, useCallback } from "react"
 
 import { Table, TablePagination, Paper, LinearProgress } from "@material-ui/core"
 
-import { $countriesData, fetchAllCountries, loadCountries } from "@model/countries"
+import { $countriesFilteredData, fetchAllCountries, loadCountries } from "@model/countries"
 
 import TableHead from "./TableHead"
 import TableBody from "./TableBody"
 import TableToolbar from "./TableToolbar"
 
 export const TableCustom = () => {
-  const countriesData = useStore($countriesData)
+  const countriesData = useStore($countriesFilteredData)
   const isCountriesLoading = useStore(loadCountries.pending)
   const [order, setOrder] = useState("asc")
   const [orderBy, setOrderBy] = useState("name")

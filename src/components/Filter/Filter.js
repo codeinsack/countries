@@ -7,11 +7,19 @@ import parse from "autosuggest-highlight/parse"
 
 import deburr from "lodash/deburr"
 
-import { TextField, Paper, MenuItem } from "@material-ui/core"
+import { TextField, Paper, MenuItem, Button } from "@material-ui/core"
+import FilterIcon from "@material-ui/icons/FilterList"
+import ClearIcon from "@material-ui/icons/ClearAll"
 
-import { $countriesFilterData } from "@model/countries"
+import { $countriesFilterData, filterCountriesData } from "@model/countries"
 
 import { theme } from "./constants"
+
+const initialFilter = {
+  country: "",
+  capital: "",
+  region: "",
+}
 
 export const Filter = () => {
   const countriesFilterData = useStore($countriesFilterData)
@@ -20,12 +28,7 @@ export const Filter = () => {
     capital: [],
     region: [],
   })
-  const [filter, setFilter] = React.useState({
-    country: "",
-    capital: "",
-    region: "",
-  })
-  console.log("filter", filter)
+  const [filter, setFilter] = React.useState(initialFilter)
 
   const data = {
     country: countriesFilterData[0],
@@ -120,6 +123,15 @@ export const Filter = () => {
     })
   }
 
+  const handleFilterClick = () => {
+    filterCountriesData(filter)
+  }
+
+  const handleClearFilterClick = () => {
+    setFilter(initialFilter)
+    filterCountriesData(initialFilter)
+  }
+
   return (
     <Root>
       {Object.keys(data)
@@ -145,9 +157,33 @@ export const Filter = () => {
             <Divider />
           </div>
         ))}
+      <ButtonStyled variant="outlined" color="primary" onClick={handleFilterClick}>
+        Filter
+        <FilterIconStyled />
+      </ButtonStyled>
+      <ButtonStyled variant="outlined" color="secondary" onClick={handleClearFilterClick}>
+        Clear
+        <ClearIconStyled />
+      </ButtonStyled>
     </Root>
   )
 }
+
+const ButtonStyled = styled(Button)`
+  margin: 10px;
+  
+  :nth-child(odd) {
+    margin-left: 15px;
+}
+`
+
+const FilterIconStyled = styled(FilterIcon)`
+  margin-left: 10px;
+`
+
+const ClearIconStyled = styled(ClearIcon)`
+  margin-left: 10px;
+`
 
 const Root = styled.div`
   height: 250px;
