@@ -8,7 +8,8 @@
     "build": "webpack",
     "lint": "eslint src/**/*.{js,jsx}",
     "lint-fix": "eslint src/**/*.{js,jsx} --fix",
-    "check": "jscpd src -r html"
+    "check": "jscpd src -r html",
+    "server": "json-server --watch ./data/db.json"
   },
   "author": "",
   "license": "ISC",
@@ -32,6 +33,7 @@
     "html-webpack-plugin": "^3.2.0",
     "image-webpack-loader": "^5.0.0",
     "jscpd": "^2.0.15",
+    "json-server": "^0.15.0",
     "style-loader": "^0.23.1",
     "webpack": "^4.33.0",
     "webpack-cli": "^3.3.2",

@@ -1,3 +1,4 @@
+import axios from "axios"
 import React from "react"
 import styled from "styled-components"
 import { useStore } from "effector-react"
@@ -11,7 +12,7 @@ import { TextField, Paper, MenuItem, Button } from "@material-ui/core"
 import FilterIcon from "@material-ui/icons/FilterList"
 import ClearIcon from "@material-ui/icons/ClearAll"
 
-import { $countriesFilterData, filterCountriesData } from "@model/countries"
+import { $countriesFilterData, filterCountriesData, $countriesData } from "@model/countries"
 
 import { theme } from "./constants"
 
@@ -23,6 +24,7 @@ const initialFilter = {
 
 export const Filter = () => {
   const countriesFilterData = useStore($countriesFilterData)
+  const countriesData = useStore($countriesData)
   const [suggestions, setSuggestions] = React.useState({
     country: [],
     capital: [],

@@ -37,7 +37,7 @@ fetchAllCountries.watch(() => {
 })
 
 loadCountries.use(async () => {
-  const { data } = await axios.get("https://restcountries.eu/rest/v2/all")
+  const { data } = await axios.get("http://localhost:3000/countries")
   return data.map(country => {
     if (country.region === "") {
       return {

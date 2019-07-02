@@ -1,3 +1,4 @@
+import axios from "axios"
 import { useStore } from "effector-react"
 import React, { useEffect, useState, useCallback } from "react"
 
@@ -12,15 +13,25 @@ import TableToolbar from "./TableToolbar"
 export const TableCustom = () => {
   const countriesData = useStore($countriesFilteredData)
   const isCountriesLoading = useStore(loadCountries.pending)
+
+  const [countries, setCountries] = useState([])
+  const [count, setCount] = useState(0)
+  const [page, setPage] = useState(0)
+
   const [order, setOrder] = useState("asc")
   const [orderBy, setOrderBy] = useState("name")
   const [selected, setSelected] = useState([])
-  const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
   useEffect(() => {
-    fetchAllCountries()
+    fetchCountries()
   }, [])
+
+  const fetchCountries = async () => {
+    const response = await axios.get(`http://localhost:3000/countries/?_page=${page}&_limit=${rowsPerPage}`)
+    setCountries(response.data)
+    setCount(Number(response.headers["x-total-count"]))
+  }
 
   const handleRequestSort = useCallback((event, property) => {
     const isDesc = orderBy === property && order === "desc"
@@ -37,7 +48,10 @@ export const TableCustom = () => {
     }
   }, [countriesData, selected])
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = async (event, newPage) => {
+    const { data } = await axios.get(`http://localhost:3000/countries/?_page=${newPage}&_limit=${rowsPerPage}`)
+    console.log(data)
+    setCountries(data)
     setPage(newPage)
   }
 
@@ -64,7 +78,7 @@ export const TableCustom = () => {
             order={order}
             orderBy={orderBy}
             selected={selected}
-            countries={countriesData}
+            countries={countries}
             setSelected={setSelected}
             rowsPerPage={rowsPerPage}
           />
@@ -72,7 +86,7 @@ export const TableCustom = () => {
         <TablePagination
           page={page}
           component="div"
-          count={countriesData.length}
+          count={count}
           rowsPerPage={rowsPerPage}
           rowsPerPageOptions={[5, 10, 25]}
           nextIconButtonProps={{ "aria-label": "Next Page" }}
