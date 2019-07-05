@@ -6,8 +6,8 @@ import { Checkbox, TableCell, TableRow, TableBody } from "@material-ui/core"
 
 import { getSorting, stableSort } from "./utils"
 
-export const TableBodyCustom = ({ selected, setSelected, rowsPerPage, page, order, orderBy, countries }) => {
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, countries.length - page * rowsPerPage)
+export const TableBodyCustom = ({ selected, setSelected, rowsPerPage, order, orderBy, countries, isCountriesLoading }) => {
+  const emptyRows = !countries.length ? rowsPerPage : 0
   const sortedCountries = stableSort(countries, getSorting(order, orderBy))
 
   const handleClick = (event, name) => {
@@ -34,7 +34,6 @@ export const TableBodyCustom = ({ selected, setSelected, rowsPerPage, page, orde
   return (
     <TableBody>
       {sortedCountries
-        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
         .map((row, index) => {
           const isItemSelected = isSelected(row.name)
           const labelId = `enhanced-table-checkbox-${index}`

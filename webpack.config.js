@@ -29,6 +29,7 @@ module.exports = {
     extensions: ["*", ".js", ".jsx"],
     alias: {
       "@model": path.resolve(appSrc, "model"),
+      "@api": path.resolve(appSrc, "api"),
     },
   },
   output: {
@@ -44,8 +45,6 @@ module.exports = {
   devServer: {
     contentBase: "./dist",
     port: 8088,
-    historyApiFallback: {
-      index: "index.js.html",
-    },
+    historyApiFallback: true,
   },
 }

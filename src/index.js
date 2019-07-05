@@ -1,18 +1,28 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import { ToastContainer } from "react-toastify"
+import { QueryParamProvider } from 'use-query-params';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
-import { Table, Filter } from "./components"
+import App from "./App";
 
 import "react-toastify/dist/ReactToastify.css"
 
-const App = () => (
-  <>
-    <Filter />
-    <Table />
-    <ToastContainer position="top-center" />
-  </>
-)
+const root = document.querySelector("#root")
 
-const rootElement = document.getElementById("root")
-ReactDOM.render(<App />, rootElement)
+const render = () => {
+  if (root) {
+    ReactDOM.render(
+      <BrowserRouter>
+        <QueryParamProvider ReactRouterRoute={Route}>
+          <Switch>
+            <Route path="/countries" exact component={App} />
+            <Redirect to="/countries" />
+          </Switch>
+        </QueryParamProvider>
+      </BrowserRouter>,
+      root,
+    )
+  }
+}
+
+render()
