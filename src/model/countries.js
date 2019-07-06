@@ -1,7 +1,7 @@
 import { toast } from "react-toastify"
 import { createStore, createEvent, createEffect } from "effector"
 
-import { countriesApi } from '@api/countries'
+import { countriesApi } from "@api/countries"
 
 const initialState = {
   count: 0,
@@ -19,7 +19,7 @@ fetchCountries.watch((params) => {
   loadCountries(params)
 })
 
-loadCountries.use(({ page, limit }) => countriesApi.getCountries(page, limit))
+loadCountries.use(({ page, limit, orderBy, order }) => countriesApi.getCountries(page, limit, orderBy, order))
 
 $isCountriesLoading
   .on(loadCountries, () => true)
