@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import { useStore } from "effector-react"
 import React, { useEffect, useState, useCallback } from "react"
-import { useQueryParam, NumberParam, StringParam } from "use-query-params"
+import { NumberParam, StringParam, useQueryParams } from "use-query-params"
 
 import { Table, TablePagination, Paper, LinearProgress } from "@material-ui/core"
 
@@ -15,14 +15,13 @@ export const TableCustom = () => {
   const countries = useStore($countries)
   const isCountriesLoading = useStore($isCountriesLoading)
 
-  const [_page, setPage] = useQueryParam("_page", NumberParam)
-  const page = _page === undefined ? 1 : _page
-  const [_limit, setLimit] = useQueryParam("_limit", NumberParam)
-  const limit = _limit === undefined ? 5 : _limit
-  const [_sort, setSort] = useQueryParam("_sort", StringParam)
-  const orderBy = _sort === undefined ? "name" : _sort
-  const [_order, setOrder] = useQueryParam("_order", StringParam)
-  const order = _order === undefined ? "asc" : _order
+  const [query, setQuery] = useQueryParams({
+    page: NumberParam,
+    limit: NumberParam,
+    order: StringParam,
+    orderBy: StringParam,
+  })
+  const { page = 1, limit = 5, order = "asc", orderBy = "name" } = query
 
   const [selected, setSelected] = useState([])
 
@@ -36,28 +35,42 @@ export const TableCustom = () => {
   }, [page, limit, order, orderBy])
 
   const handleChangePage = async (event, newPage) => {
-    setPage(newPage)
+    setQuery({
+      page: newPage,
+      limit,
+      order,
+      orderBy,
+    })
   }
 
   const handleChangeRowsPerPage = async (event) => {
     const newLimit = +event.target.value
-    setLimit(newLimit)
+    setQuery({
+      page,
+      limit: newLimit,
+      order,
+      orderBy,
+    })
   }
 
   const handleRequestSort = useCallback((event, property) => {
     const isDesc = orderBy === property && order === "desc"
-    setOrder(isDesc ? "asc" : "desc")
-    setSort(property)
+    setQuery({
+      page,
+      limit,
+      order: isDesc ? "asc" : "desc",
+      orderBy: property,
+    })
   }, [order, orderBy])
 
   const handleSelectAllClick = useCallback((event) => {
-    // if (event.target.checked) {
-    //   const newSelectedRows = countries.data.map(country => country.name)
-    //   setSelected(newSelectedRows)
-    // } else {
-    //   setSelected([])
-    // }
-  }, [countries.data, selected])
+    if (event.target.checked) {
+      const newSelectedRows = countries.data.map(country => country.name)
+      setSelected(newSelectedRows)
+    } else {
+      setSelected([])
+    }
+  }, [selected])
 
   return (
     <Paper>
